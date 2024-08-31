@@ -2,22 +2,31 @@
 
 #!/bin/bash
 
-# Definir a base do nome do arquivo
 basename="release"
 dir="./build"
 ext=".lua"
 
-# Encontrar o próximo número disponível
-i=1
-while [ -e "$dir/$basename$i$ext" ]; do
-  i=$((i + 1))
+echo  "ecreva o tipo da build (TIC80 ...)"
+read -r build
+
+if [ ! -d "$dir/$build" ]; then
+    mkdir -p "$dir/$build"
+    echo "Diretório criado: $dir/$build"
+fi
+
+id=1
+while [ -e "$dir/$build/$basename$i$ext" ]; do
+  id=$((id + 1))
 done
 
-# Criar o novo arquivo de release com o próximo número disponível
-output_file="$dir/$basename$i$ext"
 
-# Concatenar os arquivos no novo arquivo
-sudo cat "./main.lua" "./system/PDS.lua" "./system/PSPU.lua" "./system/PVB.lua" "./system/ROMMUPS.lua" > "$output_file"
+output_file="$dir/$build/$basename$id$ext"
+
+if [ "$build"="TIC80" ] || [ "$build"="tic80" ]; then
+
+  sudo cat "./main(TIC80).lua" "./system/PDS(TIC80).lua" "./system/PSPU(TIC80).lua" "./system/PVB(TIC80).lua" "./system/ROMMUPS(TIC80).lua" > "$output_file"
+
+fi
 
 echo "Arquivo gerado: $output_file"
 

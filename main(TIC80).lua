@@ -24,11 +24,7 @@ end
 
 function BOOT()
   storage:init(function(s)
-    s:set_bytes(0, {0,0,0,0,0,0,0,0}) -- action = {1 = copy, 2 = move, 3 = delete, 0 = none}
-    s:set_bytes(1, {0,0,0,0,0,0,0,0}) -- value addr selection1
-
-    s:set_bytes(3, {0,0,0,0,0,0,0,0}) -- addr 1
-    s:set_bytes(4, {0,0,0,0,0,0,0,0}) -- addr 2
+    
   end)
 end
 

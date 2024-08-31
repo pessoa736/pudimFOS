@@ -4,6 +4,17 @@
 -- By Xpudding
 
 
+
+
+local set_color_system = function()
+    for i = 0, 15 do  
+        poke(0x03fc0+i*3+1, i*(255/15))
+        poke(0x03fc0+i*3+2, i*(255/15))
+        poke(0x03fc0+i*3+3, i*(255/15))
+      
+    end
+end
+
 storage = {
 
     set_bit = function(s, addr,  value)
@@ -48,6 +59,7 @@ storage = {
     end,
     
     init = function(s, initFunctions)
+        set_color_system()
         s:load_memory()
         if type(initFunctions) == "function" then
             initFunctions(s)    

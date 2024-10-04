@@ -46,7 +46,7 @@ proc = {
     end,
     add = function(s, n, proc)
         s.cores['_' .. n][#s.cores['_' .. n]+1] = {
-            proc = proc or function() print("test core".. 1) end
+            proc = proc or function() print("no_process_or_this_is_a_test".. 1) end
         }
     end
 

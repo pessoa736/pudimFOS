@@ -24,7 +24,7 @@ output_file="$dir/$build/$basename$id$ext"
 
 if [ "$build"="TIC80" ] || [ "$build"="tic80" ]; then
 
-  sudo cat "./main(TIC80).lua" "./system/PDS(TIC80).lua" "./system/PSPU(TIC80).lua" "./system/PVB(TIC80).lua" "./system/ROMMUPS(TIC80).lua" > "$output_file"
+  sudo cat "./system/PDS(TIC80).lua" "./system/PSPU(TIC80).lua" "./system/PVB(TIC80).lua" "./system/ROMMUPS(TIC80).lua" "./main(TIC80).lua" > "$output_file"
 
 fi
 

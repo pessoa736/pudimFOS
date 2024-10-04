@@ -3,55 +3,41 @@
 ---------------------------------------------------------------------------------------------------------------------------------
 -- By Xpudding
 
-color_id ={}
-    for i = 0,9 do
-        color_id[tostring(i)] = i
-    end
-    color_id['a']=10
-    color_id['b']=11
-    color_id['c']=12
-    color_id['d']=13
-    color_id['e']=14
-    color_id['f']=15
 
-PDS = {
-    UI ={
-        rect = function(PDS, pos, size, color)
-            local u ={ 
-                pos = pos or PVB(0, 0),
-                size = size or PVB(4, 4),
+PDS={
+    set_palete = function(s, pal)
+        local addr= 0x03FC0
+        for i = 0, 45, 3 do
+            local id_color = i//3
 
-                draw = function(s)
-                    rect(s.pos.x, s.pos.y, s.size.x, s.size.y, color)
-                end
-            }
-            table.insert(PDS.drawings, u)
-        end,
-        imag = function(PDS, data, pos, size)
-            local img = {
-                data = data or "-064-064-",
-                pos = pos or PVB(0, 0),
-                size = size or PVB(64, 64),
-                draw = function(s)
-                    local rx = tonumber(string.sub(s.data, 1, 4)) 
-                    local ry = tonumber(string.sub(s.data, 6, 9))
-                    for i = 0, rx*ry do
-                        local x = s.pos.x+i%rx
-                        local y = s.pos.y+(i//rx)%ry
-                        pix(x,y,color_id[string.sub(s.data, i+9, i+9)])
-                    end 
-                end
-            }
-            table.insert(PDS.drawings, img)
+            poke(addr+id_color,   pal[id_color].r)
+            poke(addr+id_color+1, pal[id_color].g)
+            poke(addr+id_color+2, pal[id_color].b)
+
         end
-    },
-    drawings = {},
-    draw = function(s)
-        for i, d in ipairs(s) do
-            pcall(function()
-                d:draw()
-                s[i] = nil
-            end)
+    end,
+    rect = function(s, display, pos, size, color)
+        PDS:add_render(0, 
+            function()
+                local res = size* display.scale
+                local pos = pos * display.scale
+
+                rect(pos.x, pos.y, res.x, res.y, color)
+            end
+        )
+    end,
+    ord_render = {},
+    add_render = function(s, layer, render)
+        s.ord_render[layer] = render
+    end,
+    clear_screen = function(s)
+        for k, v in ipairs(s.ord_render) do
+            table.remove(s.ord_render, k)
+        end
+    end,
+    render = function(s)
+        for k, render in ipairs(s.ord_render) do
+            render()
         end
     end
 }
